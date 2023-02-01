@@ -131,17 +131,19 @@ const comment = (lcov, before, options) => {
     }
 
     const { hit, found } = lineCov(lcov);
-    const lineCovResultStr = `${percentage(lcov).toFixed(2)}% ${pdiffHtml}`;
+    const percentagesStr = `${percentage(lcov).toFixed(2)}%`;
+    const percentagesInfo = `( ${hit} / ${found} )`;
+    const lineCovResultStr = `${percentagesStr} ${percentagesInfo} ${pdiffHtml}`;
 
     const title = h2(
         `Coverage after merging into ${b(base)}`,
-        "<br><br>",
+        "<br>",
         lineCovResultStr,
-        "<br><br>",
+        "<br>",
     );
 
     const covLines = details(
-        summary(`${appName || "Coverage Report"} ( ${hit} / ${found} )`),
+        summary(`${appName || "Coverage Report"} ${percentagesInfo}`),
         codelate(report, options),
     );
 
