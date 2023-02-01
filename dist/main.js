@@ -5936,11 +5936,7 @@ const tag = name => (...children) => {
 
 const details = tag("details");
 const summary = tag("summary");
-const tr = tag("tr");
-const th = tag("th");
 const b = tag("b");
-const table = tag("table");
-const tbody = tag("tbody");
 const pre = tag("pre");
 const code = tag("code");
 const h2 = tag("h2");
@@ -6132,7 +6128,7 @@ const comment = (lcov, before, options) => {
     }
 
     const pdiffHtml = before
-        ? th(renderEmoji(pdiff), " ", arrow, " ", plus, pdiff.toFixed(2), "%")
+        ? `${renderEmoji(pdiff)} ${arrow} ${plus} ${pdiff.toFixed(2)}%`
         : "";
 
     let report = lcov;
@@ -6143,22 +6139,22 @@ const comment = (lcov, before, options) => {
         report = onlyInBefore.concat(onlyInLcov);
     }
 
-    const title = h2(`Coverage after merging into ${b(base)}`, "<br><br>");
-    const header = appName
-        ? tbody(
-              tr(th(appName), th(percentage(lcov).toFixed(2), "%"), pdiffHtml),
-          )
-        : tbody(tr(th(percentage(lcov).toFixed(2), "%"), pdiffHtml));
+    const { hit, found } = lineCov(lcov);
+    const lineCovResultStr = `${percentage(lcov).toFixed(2)}% ${pdiffHtml}`;
 
-    return fragment(
-        title,
-        table(header),
-        "\n\n",
-        details(
-            summary(appName || "Coverage Report"),
-            codelate(report, options),
-        ),
+    const title = h2(
+        `Coverage after merging into ${b(base)}`,
+        "<br><br>",
+        lineCovResultStr,
+        "<br><br>",
     );
+
+    const covLines = details(
+        summary(`${appName || "Coverage Report"} ( ${hit} / ${found} )`),
+        codelate(report, options),
+    );
+
+    return fragment(title, "\n\n", covLines);
 };
 
 /**
