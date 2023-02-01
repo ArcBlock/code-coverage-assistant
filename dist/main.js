@@ -6143,16 +6143,21 @@ const comment = (lcov, before, options) => {
         report = onlyInBefore.concat(onlyInLcov);
     }
 
-    const title = h2(`Coverage after merging into ${b(base)}`,"<br><br>");
+    const title = h2(`Coverage after merging into ${b(base)}`, "<br><br>");
     const header = appName
-        ? tbody(tr(th(appName), th(percentage(lcov).toFixed(2), "%"), pdiffHtml))
+        ? tbody(
+              tr(th(appName), th(percentage(lcov).toFixed(2), "%"), pdiffHtml),
+          )
         : tbody(tr(th(percentage(lcov).toFixed(2), "%"), pdiffHtml));
 
     return fragment(
         title,
         table(header),
         "\n\n",
-        details(summary(appName || "Coverage Report"), codelate(report, options)),
+        details(
+            summary(appName || "Coverage Report"),
+            codelate(report, options),
+        ),
     );
 };
 
